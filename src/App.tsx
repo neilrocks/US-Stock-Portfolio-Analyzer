@@ -276,13 +276,13 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans pb-12">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="bg-blue-600 p-2 rounded-lg">
               <Wallet className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-xl font-bold tracking-tight">FinanceFlow</h1>
+            <h1 className="text-xl font-bold tracking-tight">SmartPortfolio</h1>
           </div>
           <div className="flex items-center gap-4">
             {user && (
@@ -309,13 +309,13 @@ export default function App() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative">
         {!user ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <div className="bg-blue-50 p-6 rounded-3xl mb-6">
               <Wallet className="w-16 h-16 text-blue-600" />
             </div>
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Welcome to FinanceFlow</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Welcome to SmartPortfolio</h2>
             <p className="text-slate-500 max-w-md mb-8">
               Securely track your investments, monitor expenses, and get AI-powered portfolio insights. Sign in to get started.
             </p>

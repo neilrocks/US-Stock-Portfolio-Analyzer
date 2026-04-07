@@ -1,5 +1,5 @@
 {
-  "name": "FinanceFlow Dashboard",
-  "description": "A modern personal finance dashboard for tracking stock investments and expenses with real-time visualizations, broker report imports, and interactive allocation charts.",
+  "name": "SmartPortfolio: AI Stock Tracker & Investment Analyzer",
+  "description": "Track your stock portfolio and expenses with SmartPortfolio. Get real-time AI-powered investment insights, risk assessments, and rebalancing suggestions powered by Gemini AI.",
   "requestFramePermissions": []
 }
