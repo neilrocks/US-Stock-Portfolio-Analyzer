@@ -1,0 +1,125 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: /users/{uid}
+    // Fields:
+    //   - uid: string (required)
+    //   - email: string (required)
+    //   - displayName: string (optional)
+    //   - photoURL: string (optional)
+    //   - createdAt: timestamp (optional)
+    //
+    // Collection: /users/{uid}/stocks/{stockId}
+    // Fields:
+    //   - uid: string (required)
+    //   - name: string (required)
+    //   - amount: number (required)
+    //   - purchasePrice: number (required)
+    //   - date: string (required)
+    //   - createdAt: timestamp (optional)
+    //
+    // Collection: /users/{uid}/expenses/{expenseId}
+    // Fields:
+    //   - uid: string (required)
+    //   - category: string (required)
+    //   - amount: number (required)
+    //   - date: string (required)
+    //   - createdAt: timestamp (optional)
+    //
+    // Collection: /users/{uid}/insights/{insightId}
+    // Fields:
+    //   - uid: string (required)
+    //   - portfolioAnalysis: string (optional)
+    //   - riskAssessment: string (optional)
+    //   - rebalancingSuggestions: string (optional)
+    //   - stockRecommendations: map (optional)
+    //   - createdAt: timestamp (required)
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "swapnilroy22@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    function isValidEmail(email) {
+      return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'email']) &&
+             data.uid == request.auth.uid &&
+             isValidEmail(data.email);
+    }
+
+    function isValidStock(data) {
+      return data.keys().hasAll(['uid', 'name', 'amount', 'purchasePrice', 'date']) &&
+             data.uid == request.auth.uid &&
+             data.name is string && data.name.size() > 0 && data.name.size() < 100 &&
+             data.amount is number && data.amount >= 0 &&
+             data.purchasePrice is number && data.purchasePrice >= 0 &&
+             data.date is string;
+    }
+
+    function isValidExpense(data) {
+      return data.keys().hasAll(['uid', 'category', 'amount', 'date']) &&
+             data.uid == request.auth.uid &&
+             data.category is string &&
+             data.amount is number && data.amount >= 0 &&
+             data.date is string;
+    }
+
+    function isValidInsight(data) {
+      return data.keys().hasAll(['uid', 'createdAt']) &&
+             data.uid == request.auth.uid;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow create: if isOwner(uid) && isValidUser(request.resource.data);
+      allow update: if isOwner(uid) && isValidUser(request.resource.data) && request.resource.data.uid == resource.data.uid;
+      allow delete: if isAdmin();
+
+      match /stocks/{stockId} {
+        allow read: if isOwner(uid) || isAdmin();
+        allow create: if isOwner(uid) && isValidStock(request.resource.data);
+        allow update: if isOwner(uid) && isValidStock(request.resource.data);
+        allow delete: if isOwner(uid) || isAdmin();
+      }
+
+      match /expenses/{expenseId} {
+        allow read: if isOwner(uid) || isAdmin();
+        allow create: if isOwner(uid) && isValidExpense(request.resource.data);
+        allow update: if isOwner(uid) && isValidExpense(request.resource.data);
+        allow delete: if isOwner(uid) || isAdmin();
+      }
+
+      match /insights/{insightId} {
+        allow read: if isOwner(uid) || isAdmin();
+        allow create: if isOwner(uid) && isValidInsight(request.resource.data);
+        allow update: if isOwner(uid) && isValidInsight(request.resource.data);
+        allow delete: if isOwner(uid) || isAdmin();
+      }
+    }
+  }
+}

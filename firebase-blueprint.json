@@ -1,0 +1,76 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and settings",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Stock": {
+      "title": "Stock",
+      "description": "A stock holding entry",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "amount": { "type": "number" },
+        "purchasePrice": { "type": "number" },
+        "date": { "type": "string", "format": "date" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "name", "amount", "purchasePrice", "date"]
+    },
+    "Expense": {
+      "title": "Expense",
+      "description": "An expense entry",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "category": { "type": "string" },
+        "amount": { "type": "number" },
+        "date": { "type": "string", "format": "date" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "category", "amount", "date"]
+    },
+    "AIInsight": {
+      "title": "AIInsight",
+      "description": "AI generated portfolio insights",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "portfolioAnalysis": { "type": "string" },
+        "riskAssessment": { "type": "string" },
+        "rebalancingSuggestions": { "type": "string" },
+        "stockRecommendations": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/users/{uid}/stocks/{stockId}": {
+      "schema": "Stock",
+      "description": "User stock holdings"
+    },
+    "/users/{uid}/expenses/{expenseId}": {
+      "schema": "Expense",
+      "description": "User expenses"
+    },
+    "/users/{uid}/insights/{insightId}": {
+      "schema": "AIInsight",
+      "description": "AI generated insights for the user"
+    }
+  }
+}

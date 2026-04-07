@@ -1,0 +1,5 @@
+{
+  "name": "FinanceFlow Dashboard",
+  "description": "A modern personal finance dashboard for tracking stock investments and expenses with real-time visualizations, broker report imports, and interactive allocation charts.",
+  "requestFramePermissions": []
+}
