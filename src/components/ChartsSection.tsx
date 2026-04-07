@@ -61,10 +61,37 @@ export default function ChartsSection({
     return null;
   };
 
+  const CustomLegend = ({ data, colors }: { data: { name: string; value: number }[], colors: string[] }) => {
+    const total = data.reduce((sum, item) => sum + item.value, 0);
+    return (
+      <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
+        {data.map((entry, index) => {
+          const percentage = total > 0 ? (entry.value / total) * 100 : 0;
+          return (
+            <div key={entry.name} className="flex items-center gap-2 group">
+              <div 
+                className="w-3 h-3 rounded-full shrink-0" 
+                style={{ backgroundColor: colors[index % colors.length] }}
+              />
+              <div className="flex flex-col min-w-0">
+                <span className="text-xs font-semibold text-slate-700 truncate" title={entry.name}>
+                  {entry.name}
+                </span>
+                <span className="text-[10px] text-slate-400 font-medium">
+                  {percentage.toFixed(1)}%
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
       {/* Stock Allocation */}
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 relative">
+      <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold">Stock Allocation</h3>
           <button
@@ -79,7 +106,7 @@ export default function ChartsSection({
             )}
           </button>
         </div>
-        <div className="h-[300px]">
+        <div className="h-[240px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -87,7 +114,7 @@ export default function ChartsSection({
                 cx="50%"
                 cy="50%"
                 innerRadius={60}
-                outerRadius={100}
+                outerRadius={90}
                 paddingAngle={5}
                 dataKey="value"
                 labelLine={false}
@@ -101,16 +128,16 @@ export default function ChartsSection({
                 animationDuration={300}
                 animationEasing="ease-out"
               />
-              <Legend verticalAlign="bottom" height={36} />
             </PieChart>
           </ResponsiveContainer>
         </div>
+        <CustomLegend data={stockData} colors={COLORS} />
       </div>
 
       {/* Expense Breakdown */}
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+      <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
         <h3 className="text-lg font-semibold mb-6">Expense Breakdown</h3>
-        <div className="h-[300px]">
+        <div className="h-[240px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -131,16 +158,16 @@ export default function ChartsSection({
                 animationDuration={300}
                 animationEasing="ease-out"
               />
-              <Legend verticalAlign="bottom" height={36} />
             </PieChart>
           </ResponsiveContainer>
         </div>
+        <CustomLegend data={expenseData} colors={COLORS} />
       </div>
 
       {/* Investment vs Expenses */}
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+      <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
         <h3 className="text-lg font-semibold mb-6">Investment vs Expenses</h3>
-        <div className="h-[300px]">
+        <div className="h-[240px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -148,7 +175,7 @@ export default function ChartsSection({
                 cx="50%"
                 cy="50%"
                 innerRadius={60}
-                outerRadius={100}
+                outerRadius={90}
                 paddingAngle={5}
                 dataKey="value"
               >
@@ -160,10 +187,10 @@ export default function ChartsSection({
                 animationDuration={300}
                 animationEasing="ease-out"
               />
-              <Legend verticalAlign="bottom" height={36} />
             </PieChart>
           </ResponsiveContainer>
         </div>
+        <CustomLegend data={summaryData} colors={["#3b82f6", "#ef4444"]} />
       </div>
 
       {/* Yearly Trend */}
