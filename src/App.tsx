@@ -276,6 +276,10 @@ export default function App() {
       }
     });
 
+    // Sort active stock allocation and sales allocation in decreasing order of value/percentage
+    activeAllocations.sort((a, b) => b.value - a.value);
+    salesAllocations.sort((a, b) => b.value - a.value);
+
     // Chart: Active Portfolio vs Sales Realized
     const summaryData = [
       { name: "Active Portfolio Value", value: totalPortfolioMarketValue },

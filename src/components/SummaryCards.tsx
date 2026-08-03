@@ -1,4 +1,4 @@
-import { TrendingUp, TrendingDown, DollarSign, Wallet } from "lucide-react";
+import { TrendingUp, ArrowUpRight, DollarSign, Wallet } from "lucide-react";
 import { formatCurrency } from "@/src/lib/utils";
 import { motion } from "motion/react";
 
@@ -31,6 +31,7 @@ export default function SummaryCards({
       icon: DollarSign,
       color: "text-slate-700",
       bg: "bg-slate-100",
+      subText: "Buys minus Sells"
     },
     {
       title: "Total Purchases (Buys)",
@@ -38,13 +39,15 @@ export default function SummaryCards({
       icon: TrendingUp,
       color: "text-emerald-600",
       bg: "bg-emerald-50",
+      subText: "Gross capital spent"
     },
     {
-      title: "Realized Sales (Proceeds)",
+      title: "Realized Sales Proceeds",
       value: totalSales,
-      icon: TrendingDown,
-      color: "text-rose-600",
-      bg: "bg-rose-50",
+      icon: ArrowUpRight,
+      color: "text-indigo-600",
+      bg: "bg-indigo-50",
+      subText: "Total sell cash received"
     },
   ];
 
@@ -71,6 +74,11 @@ export default function SummaryCards({
             {card.subValue && (
               <p className={`text-xs font-semibold mt-1 ${totalReturn >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
                 {card.subValue}
+              </p>
+            )}
+            {card.subText && (
+              <p className="text-[11px] text-slate-400 mt-1 font-normal">
+                {card.subText}
               </p>
             )}
           </div>

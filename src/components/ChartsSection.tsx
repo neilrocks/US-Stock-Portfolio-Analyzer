@@ -45,7 +45,7 @@ export default function ChartsSection({
           </p>
           {viewMode === "amount" && (
             <p className="text-xs text-slate-400">
-              {percentage.toFixed(1)}% of portfolio
+              {percentage.toFixed(1)}% of total
             </p>
           )}
           {viewMode === "percentage" && (
@@ -93,7 +93,7 @@ export default function ChartsSection({
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="text-lg font-semibold">Stock Allocation</h3>
-            <p className="text-xs text-slate-400">Percentage share of each held stock</p>
+            <p className="text-xs text-slate-400">Percentage share of active holdings</p>
           </div>
           <button
             onClick={onToggleViewMode}
@@ -153,8 +153,8 @@ export default function ChartsSection({
                 paddingAngle={5}
                 dataKey="value"
               >
-                <Cell fill="#10b981" />
-                <Cell fill="#f43f5e" />
+                <Cell fill="#3b82f6" />
+                <Cell fill="#6366f1" />
               </Pie>
               <Tooltip 
                 content={<CustomTooltip />} 
@@ -164,7 +164,7 @@ export default function ChartsSection({
             </PieChart>
           </ResponsiveContainer>
         </div>
-        <CustomLegend data={summaryData} colors={["#10b981", "#f43f5e"]} />
+        <CustomLegend data={summaryData} colors={["#3b82f6", "#6366f1"]} />
       </div>
 
       {/* Yearly Stock Activity Trend */}
@@ -197,20 +197,20 @@ export default function ChartsSection({
               <Line
                 type="monotone"
                 dataKey="investments"
-                stroke="#10b981"
+                stroke="#3b82f6"
                 strokeWidth={3}
-                dot={{ r: 4, fill: '#10b981', strokeWidth: 2, stroke: '#fff' }}
+                dot={{ r: 4, fill: '#3b82f6', strokeWidth: 2, stroke: '#fff' }}
                 activeDot={{ r: 6 }}
                 name="Purchases (Buys)"
               />
               <Line
                 type="monotone"
                 dataKey="sales"
-                stroke="#f43f5e"
+                stroke="#6366f1"
                 strokeWidth={3}
-                dot={{ r: 4, fill: '#f43f5e', strokeWidth: 2, stroke: '#fff' }}
+                dot={{ r: 4, fill: '#6366f1', strokeWidth: 2, stroke: '#fff' }}
                 activeDot={{ r: 6 }}
-                name="Realized Sales"
+                name="Realized Sales Proceeds"
               />
             </LineChart>
           </ResponsiveContainer>
