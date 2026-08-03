@@ -15,17 +15,19 @@
     },
     "Stock": {
       "title": "Stock",
-      "description": "A stock holding entry",
+      "description": "A stock transaction entry (BUY or SELL)",
       "type": "object",
       "properties": {
         "uid": { "type": "string" },
         "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["BUY", "SELL"] },
         "amount": { "type": "number" },
         "purchasePrice": { "type": "number" },
+        "salePrice": { "type": "number" },
         "date": { "type": "string", "format": "date" },
         "createdAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["uid", "name", "amount", "purchasePrice", "date"]
+      "required": ["uid", "name", "amount", "date"]
     },
     "Expense": {
       "title": "Expense",
@@ -62,7 +64,7 @@
     },
     "/users/{uid}/stocks/{stockId}": {
       "schema": "Stock",
-      "description": "User stock holdings"
+      "description": "User stock holdings and transactions"
     },
     "/users/{uid}/expenses/{expenseId}": {
       "schema": "Expense",

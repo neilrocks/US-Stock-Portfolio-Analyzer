@@ -86,12 +86,24 @@ export default function App() {
     }
   }, [data.stocks.length]);
 
+  // Helper to remove undefined properties before saving to Firestore
+  const sanitizeForFirestore = (obj: Record<string, any>) => {
+    const clean: Record<string, any> = {};
+    Object.entries(obj).forEach(([key, val]) => {
+      if (val !== undefined) {
+        clean[key] = val;
+      }
+    });
+    return clean;
+  };
+
   // Handlers
   const addStock = async (entry: Omit<StockEntry, "id">) => {
     if (!user) return;
     try {
+      const cleanData = sanitizeForFirestore(entry);
       await addDoc(collection(db, "users", user.uid, "stocks"), {
-        ...entry,
+        ...cleanData,
         name: entry.name.toUpperCase(),
         uid: user.uid,
         createdAt: serverTimestamp()
@@ -114,8 +126,9 @@ export default function App() {
 
       entries.forEach(entry => {
         const newDocRef = doc(collection(db, "users", user.uid, "stocks"));
+        const cleanData = sanitizeForFirestore(entry);
         batch.set(newDocRef, {
-          ...entry,
+          ...cleanData,
           name: entry.name.toUpperCase(),
           uid: user.uid,
           createdAt: serverTimestamp()
@@ -160,8 +173,9 @@ export default function App() {
   const saveEdit = async (id: string, updatedData: any) => {
     if (!user) return;
     try {
+      const cleanData = sanitizeForFirestore(updatedData);
       await updateDoc(doc(db, "users", user.uid, "stocks", id), {
-        ...updatedData,
+        ...cleanData,
         name: (updatedData.name || "").toUpperCase()
       });
       setEditingEntry(null);

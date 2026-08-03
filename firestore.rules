@@ -69,12 +69,14 @@ service cloud.firestore {
     }
 
     function isValidStock(data) {
-      return data.keys().hasAll(['uid', 'name', 'amount', 'purchasePrice', 'date']) &&
+      return data.keys().hasAll(['uid', 'name', 'amount', 'date']) &&
              data.uid == request.auth.uid &&
              data.name is string && data.name.size() > 0 && data.name.size() < 100 &&
              data.amount is number && data.amount >= 0 &&
-             data.purchasePrice is number && data.purchasePrice >= 0 &&
-             data.date is string;
+             data.date is string &&
+             (!('type' in data) || data.type in ['BUY', 'SELL']) &&
+             (!('purchasePrice' in data) || data.purchasePrice is number) &&
+             (!('salePrice' in data) || data.salePrice is number);
     }
 
     function isValidExpense(data) {
