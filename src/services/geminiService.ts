@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { StockEntry, ExpenseEntry } from "../types";
+import { StockEntry } from "../types";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
@@ -18,16 +18,18 @@ export interface PortfolioInsights {
   newStocksToConsider: string[];
 }
 
-export async function getPortfolioInsights(stocks: StockEntry[], expenses: ExpenseEntry[]): Promise<PortfolioInsights> {
+export async function getPortfolioInsights(stocks: StockEntry[]): Promise<PortfolioInsights> {
   const portfolioData = stocks.map(s => ({
     symbol: s.name,
+    type: s.type || "BUY",
     amount: s.amount,
     purchasePrice: s.purchasePrice,
+    salePrice: s.salePrice,
     date: s.date
   }));
 
   const prompt = `
-    Analyze the following stock portfolio and provide detailed financial insights.
+    Analyze the following stock portfolio transactions (including Buys and Sells) and provide detailed financial insights.
     
     Portfolio Data:
     ${JSON.stringify(portfolioData, null, 2)}

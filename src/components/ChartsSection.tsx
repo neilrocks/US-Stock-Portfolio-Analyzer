@@ -17,16 +17,14 @@ import { Percent, DollarSign } from "lucide-react";
 
 interface ChartsSectionProps {
   stockData: { name: string; value: number }[];
-  expenseData: { name: string; value: number }[];
   summaryData: { name: string; value: number }[];
-  trendData: { date: string; investments: number; expenses: number }[];
+  trendData: { date: string; investments: number; sales: number }[];
   viewMode: "amount" | "percentage";
   onToggleViewMode: () => void;
 }
 
 export default function ChartsSection({
   stockData,
-  expenseData,
   summaryData,
   trendData,
   viewMode,
@@ -42,12 +40,12 @@ export default function ChartsSection({
       return (
         <div className="bg-white p-3 border border-slate-100 shadow-lg rounded-lg">
           <p className="text-sm font-semibold text-slate-900">{payload[0].name}</p>
-          <p className="text-sm text-blue-600">
+          <p className="text-sm text-blue-600 font-bold">
             {viewMode === "amount" ? formatCurrency(value) : `${percentage.toFixed(1)}%`}
           </p>
           {viewMode === "amount" && (
             <p className="text-xs text-slate-400">
-              {percentage.toFixed(1)}% of total
+              {percentage.toFixed(1)}% of portfolio
             </p>
           )}
           {viewMode === "percentage" && (
@@ -90,10 +88,13 @@ export default function ChartsSection({
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-      {/* Stock Allocation */}
+      {/* Active Stock Allocation */}
       <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold">Stock Allocation</h3>
+          <div>
+            <h3 className="text-lg font-semibold">Stock Allocation</h3>
+            <p className="text-xs text-slate-400">Percentage share of each held stock</p>
+          </div>
           <button
             onClick={onToggleViewMode}
             className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium bg-slate-50 text-slate-600 hover:bg-slate-100 rounded-lg border border-slate-200 transition-all"
@@ -134,39 +135,12 @@ export default function ChartsSection({
         <CustomLegend data={stockData} colors={COLORS} />
       </div>
 
-      {/* Expense Breakdown */}
+      {/* Portfolio Value vs Realized Sales */}
       <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
-        <h3 className="text-lg font-semibold mb-6">Expense Breakdown</h3>
-        <div className="h-[240px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={expenseData}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={80}
-                paddingAngle={5}
-                dataKey="value"
-              >
-                {expenseData.map((_, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip 
-                content={<CustomTooltip />} 
-                animationDuration={300}
-                animationEasing="ease-out"
-              />
-            </PieChart>
-          </ResponsiveContainer>
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold">Capital Allocation Overview</h3>
+          <p className="text-xs text-slate-400">Active holdings vs realized sales proceeds</p>
         </div>
-        <CustomLegend data={expenseData} colors={COLORS} />
-      </div>
-
-      {/* Investment vs Expenses */}
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
-        <h3 className="text-lg font-semibold mb-6">Investment vs Expenses</h3>
         <div className="h-[240px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -179,8 +153,8 @@ export default function ChartsSection({
                 paddingAngle={5}
                 dataKey="value"
               >
-                <Cell fill="#3b82f6" />
-                <Cell fill="#ef4444" />
+                <Cell fill="#10b981" />
+                <Cell fill="#f43f5e" />
               </Pie>
               <Tooltip 
                 content={<CustomTooltip />} 
@@ -190,12 +164,15 @@ export default function ChartsSection({
             </PieChart>
           </ResponsiveContainer>
         </div>
-        <CustomLegend data={summaryData} colors={["#3b82f6", "#ef4444"]} />
+        <CustomLegend data={summaryData} colors={["#10b981", "#f43f5e"]} />
       </div>
 
-      {/* Yearly Trend */}
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-        <h3 className="text-lg font-semibold mb-6">Yearly Trend</h3>
+      {/* Yearly Stock Activity Trend */}
+      <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 lg:col-span-2">
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold">Yearly Stock Transaction Trend</h3>
+          <p className="text-xs text-slate-400">Total stock purchases (buys) vs realized sales (proceeds)</p>
+        </div>
         <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={trendData}>
@@ -220,20 +197,20 @@ export default function ChartsSection({
               <Line
                 type="monotone"
                 dataKey="investments"
-                stroke="#3b82f6"
+                stroke="#10b981"
                 strokeWidth={3}
-                dot={{ r: 4, fill: '#3b82f6', strokeWidth: 2, stroke: '#fff' }}
+                dot={{ r: 4, fill: '#10b981', strokeWidth: 2, stroke: '#fff' }}
                 activeDot={{ r: 6 }}
-                name="Investments"
+                name="Purchases (Buys)"
               />
               <Line
                 type="monotone"
-                dataKey="expenses"
-                stroke="#ef4444"
+                dataKey="sales"
+                stroke="#f43f5e"
                 strokeWidth={3}
-                dot={{ r: 4, fill: '#ef4444', strokeWidth: 2, stroke: '#fff' }}
+                dot={{ r: 4, fill: '#f43f5e', strokeWidth: 2, stroke: '#fff' }}
                 activeDot={{ r: 6 }}
-                name="Expenses"
+                name="Realized Sales"
               />
             </LineChart>
           </ResponsiveContainer>

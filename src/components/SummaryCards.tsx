@@ -1,46 +1,50 @@
-import { TrendingUp, TrendingDown, Wallet } from "lucide-react";
+import { TrendingUp, TrendingDown, DollarSign, Wallet } from "lucide-react";
 import { formatCurrency } from "@/src/lib/utils";
 import { motion } from "motion/react";
 
 interface SummaryCardsProps {
   totalInvestment: number;
-  totalExpenses: number;
+  totalSales?: number;
   totalPortfolioValue: number;
 }
 
-export default function SummaryCards({ totalInvestment, totalExpenses, totalPortfolioValue }: SummaryCardsProps) {
-  const netBalance = totalPortfolioValue - totalExpenses;
-  const totalReturn = totalInvestment > 0 ? ((totalPortfolioValue - totalInvestment) / totalInvestment) * 100 : 0;
+export default function SummaryCards({ 
+  totalInvestment, 
+  totalSales = 0, 
+  totalPortfolioValue 
+}: SummaryCardsProps) {
+  const netCapitalInvested = Math.max(0, totalInvestment - totalSales);
+  const totalReturn = netCapitalInvested > 0 ? ((totalPortfolioValue - netCapitalInvested) / netCapitalInvested) * 100 : 0;
 
   const cards = [
     {
-      title: "Invested Capital",
-      value: totalInvestment,
-      icon: TrendingUp,
-      color: "text-slate-600",
-      bg: "bg-slate-50",
+      title: "Current Portfolio Value",
+      value: totalPortfolioValue,
+      icon: Wallet,
+      color: "text-blue-600",
+      bg: "bg-blue-50",
+      subValue: `${totalReturn >= 0 ? "+" : ""}${totalReturn.toFixed(2)}% Net Return`
     },
     {
-      title: "Portfolio Value",
-      value: totalPortfolioValue,
+      title: "Net Capital Invested",
+      value: netCapitalInvested,
+      icon: DollarSign,
+      color: "text-slate-700",
+      bg: "bg-slate-100",
+    },
+    {
+      title: "Total Purchases (Buys)",
+      value: totalInvestment,
       icon: TrendingUp,
       color: "text-emerald-600",
       bg: "bg-emerald-50",
-      subValue: `${totalReturn >= 0 ? "+" : ""}${totalReturn.toFixed(2)}% Return`
     },
     {
-      title: "Total Expenses",
-      value: totalExpenses,
+      title: "Realized Sales (Proceeds)",
+      value: totalSales,
       icon: TrendingDown,
       color: "text-rose-600",
       bg: "bg-rose-50",
-    },
-    {
-      title: "Net Worth",
-      value: netBalance,
-      icon: Wallet,
-      color: netBalance >= 0 ? "text-blue-600" : "text-orange-600",
-      bg: netBalance >= 0 ? "bg-blue-50" : "bg-orange-50",
     },
   ];
 
@@ -65,7 +69,7 @@ export default function SummaryCards({ totalInvestment, totalExpenses, totalPort
               {formatCurrency(card.value)}
             </p>
             {card.subValue && (
-              <p className={`text-xs font-semibold mt-1 ${totalReturn >= 0 ? "text-emerald-500" : "text-rose-500"}`}>
+              <p className={`text-xs font-semibold mt-1 ${totalReturn >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
                 {card.subValue}
               </p>
             )}

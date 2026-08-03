@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { Sparkles, AlertTriangle, TrendingUp, RefreshCw, ChevronDown, ChevronUp, CheckCircle2, XCircle, Info } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { StockEntry, ExpenseEntry } from "../types";
+import { StockEntry } from "../types";
 import { getPortfolioInsights, PortfolioInsights } from "../services/geminiService";
 import { formatCurrency } from "../lib/utils";
 
 interface AIInsightsSectionProps {
   stocks: StockEntry[];
-  expenses: ExpenseEntry[];
 }
 
-export default function AIInsightsSection({ stocks, expenses }: AIInsightsSectionProps) {
+export default function AIInsightsSection({ stocks }: AIInsightsSectionProps) {
   const [insights, setInsights] = useState<PortfolioInsights | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +23,7 @@ export default function AIInsightsSection({ stocks, expenses }: AIInsightsSectio
     setIsLoading(true);
     setError(null);
     try {
-      const data = await getPortfolioInsights(stocks, expenses);
+      const data = await getPortfolioInsights(stocks);
       setInsights(data);
     } catch (err) {
       setError("Failed to generate AI insights. Please try again.");

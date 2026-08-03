@@ -39,6 +39,7 @@ export default function StockForm({ onAdd }: StockFormProps) {
 
     onAdd({
       name: name.toUpperCase(),
+      type: "BUY",
       amount: numAmount,
       purchasePrice: numPurchasePrice,
       date,
@@ -56,9 +57,9 @@ export default function StockForm({ onAdd }: StockFormProps) {
 
   return (
     <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-full">
-      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-        <PlusCircle className="w-5 h-5 text-blue-500" />
-        Add Stock Investment
+      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-emerald-600">
+        <PlusCircle className="w-5 h-5 text-emerald-500" />
+        Add Stock Purchase
       </h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>

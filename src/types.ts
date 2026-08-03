@@ -6,8 +6,10 @@
 export interface StockEntry {
   id: string;
   name: string;
+  type?: "BUY" | "SELL";
   amount: number;
-  purchasePrice: number;
+  purchasePrice?: number;
+  salePrice?: number;
   date: string;
 }
 
