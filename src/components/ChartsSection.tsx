@@ -12,7 +12,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { COLORS } from "@/src/types";
-import { formatCurrency } from "@/src/lib/utils";
+import { formatCurrency, formatPercentage } from "@/src/lib/utils";
 import { Percent, DollarSign } from "lucide-react";
 
 interface ChartsSectionProps {
@@ -41,11 +41,11 @@ export default function ChartsSection({
         <div className="bg-white p-3 border border-slate-100 shadow-lg rounded-lg">
           <p className="text-sm font-semibold text-slate-900">{payload[0].name}</p>
           <p className="text-sm text-blue-600 font-bold">
-            {viewMode === "amount" ? formatCurrency(value) : `${percentage.toFixed(1)}%`}
+            {viewMode === "amount" ? formatCurrency(value) : formatPercentage(percentage)}
           </p>
           {viewMode === "amount" && (
             <p className="text-xs text-slate-400">
-              {percentage.toFixed(1)}% of total
+              {formatPercentage(percentage)} of total
             </p>
           )}
           {viewMode === "percentage" && (
@@ -76,7 +76,7 @@ export default function ChartsSection({
                   {entry.name}
                 </span>
                 <span className="text-[10px] text-slate-400 font-medium">
-                  {percentage.toFixed(1)}%
+                  {formatPercentage(percentage)}
                 </span>
               </div>
             </div>

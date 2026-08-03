@@ -25,8 +25,8 @@ export default function AIInsightsSection({ stocks }: AIInsightsSectionProps) {
     try {
       const data = await getPortfolioInsights(stocks);
       setInsights(data);
-    } catch (err) {
-      setError("Failed to generate AI insights. Please try again.");
+    } catch (err: any) {
+      setError(err?.message || "Failed to generate AI insights. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -43,7 +43,7 @@ export default function AIInsightsSection({ stocks }: AIInsightsSectionProps) {
             <h2 className="text-2xl font-bold">Portfolio Intelligence</h2>
           </div>
           <p className="text-indigo-100 mb-6 max-w-2xl">
-            Get deep insights into your portfolio diversification, risk levels, and personalized stock recommendations powered by Gemini AI.
+            Get deep insights into your portfolio diversification, risk levels, and personalized stock recommendations powered by Llama 3.2 AI.
           </p>
           <button
             onClick={generateInsights}
@@ -142,8 +142,8 @@ export default function AIInsightsSection({ stocks }: AIInsightsSectionProps) {
               Stock-Level Insights
             </h3>
             <div className="space-y-4">
-              {Object.entries(insights.stockRecommendations).map(([symbol, data]) => {
-                const rec = data as { insights: string; suggestion: string };
+              {Object.entries(insights.stockRecommendations || {}).map(([symbol, data]) => {
+                const rec = (data || {}) as { insights?: string; suggestion?: string };
                 return (
                   <div key={symbol} className="border border-slate-100 rounded-xl overflow-hidden">
                     <button
@@ -211,7 +211,7 @@ export default function AIInsightsSection({ stocks }: AIInsightsSectionProps) {
                 New Stocks to Consider
               </h3>
               <div className="flex flex-wrap gap-3">
-                {insights.newStocksToConsider.map((symbol) => (
+                {(insights.newStocksToConsider || []).map((symbol) => (
                   <div key={symbol} className="bg-white px-4 py-2 rounded-xl shadow-sm border border-indigo-100 flex items-center gap-2">
                     <span className="font-bold text-indigo-700">{symbol}</span>
                     <TrendingUp className="w-3 h-3 text-emerald-500" />

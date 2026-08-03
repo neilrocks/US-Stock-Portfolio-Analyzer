@@ -1,4 +1,4 @@
-import { formatCurrency } from "@/src/lib/utils";
+import { formatCurrency, formatPercentage } from "@/src/lib/utils";
 import { motion } from "motion/react";
 
 interface AggregatedInsightsProps {
@@ -42,7 +42,7 @@ export default function AggregatedInsights({
                   <div className="flex justify-between text-sm">
                     <span className="font-semibold text-slate-800">{stock.name}</span>
                     <span className="text-slate-600 font-medium">
-                      {formatCurrency(stock.value)} <span className="text-blue-600 font-bold">({percentage.toFixed(1)}%)</span>
+                      {formatCurrency(stock.value)} <span className="text-blue-600 font-bold">({formatPercentage(percentage)})</span>
                     </span>
                   </div>
                   <div className="w-full bg-slate-100 rounded-full h-2">
@@ -81,7 +81,7 @@ export default function AggregatedInsights({
                   <div className="flex justify-between text-sm">
                     <span className="font-semibold text-slate-800">{sale.name}</span>
                     <span className="text-slate-600 font-medium">
-                      {formatCurrency(sale.value)} <span className="text-indigo-600 font-semibold">({percentage.toFixed(1)}% of sales)</span>
+                      {formatCurrency(sale.value)} <span className="text-indigo-600 font-semibold">({formatPercentage(percentage)} of sales)</span>
                     </span>
                   </div>
                   <div className="w-full bg-slate-100 rounded-full h-2">

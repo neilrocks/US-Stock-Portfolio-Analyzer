@@ -19,3 +19,11 @@ export function formatDate(dateString: string): string {
     day: "numeric",
   });
 }
+
+export function formatPercentage(percentage: number, decimals: number = 2): string {
+  if (isNaN(percentage)) return "0.00%";
+  if (percentage > 0 && percentage < 0.01) {
+    return "<0.01%";
+  }
+  return `${percentage.toFixed(decimals)}%`;
+}

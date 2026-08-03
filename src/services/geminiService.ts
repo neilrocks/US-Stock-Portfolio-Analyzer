@@ -1,7 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
 import { StockEntry } from "../types";
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export interface PortfolioInsights {
   diversificationAnalysis: string;
@@ -19,55 +16,25 @@ export interface PortfolioInsights {
 }
 
 export async function getPortfolioInsights(stocks: StockEntry[]): Promise<PortfolioInsights> {
-  const portfolioData = stocks.map(s => ({
-    symbol: s.name,
-    type: s.type || "BUY",
-    amount: s.amount,
-    purchasePrice: s.purchasePrice,
-    salePrice: s.salePrice,
-    date: s.date
-  }));
-
-  const prompt = `
-    Analyze the following stock portfolio transactions (including Buys and Sells) and provide detailed financial insights.
-    
-    Portfolio Data:
-    ${JSON.stringify(portfolioData, null, 2)}
-    
-    Please provide the analysis in the following JSON format:
-    {
-      "diversificationAnalysis": "...",
-      "riskAssessment": "...",
-      "rebalancingSuggestions": "...",
-      "stockRecommendations": {
-        "SYMBOL": {
-          "insights": "Fundamental and Technical analysis summary",
-          "suggestion": "Hold | Buy More | Reduce | Exit"
-        }
-      },
-      "improvementSuggestions": "...",
-      "sectorAllocationSuggestions": "...",
-      "newStocksToConsider": ["SYMBOL1", "SYMBOL2", ...]
-    }
-    
-    Ensure the response is a valid JSON object.
-  `;
-
   try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3.1-pro-preview",
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json"
-      }
+    const res = await fetch("/api/portfolio-intelligence", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ stocks }),
     });
-    
-    const text = response.text;
-    if (!text) throw new Error("Empty response from AI");
-    
-    return JSON.parse(text) as PortfolioInsights;
-  } catch (error) {
+
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.message || errData.error || `Server returned error ${res.status}`);
+    }
+
+    const data = await res.json();
+    return data as PortfolioInsights;
+  } catch (error: any) {
     console.error("Error generating portfolio insights:", error);
-    throw error;
+    throw new Error(error.message || "Failed to generate AI insights.");
   }
 }
+
