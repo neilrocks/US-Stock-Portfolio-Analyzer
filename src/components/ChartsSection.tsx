@@ -107,8 +107,8 @@ export default function ChartsSection({
             )}
           </button>
         </div>
-        <div className="h-[240px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
+        <div className="h-[240px] w-full min-w-0">
+          <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
             <PieChart>
               <Pie
                 data={stockData}
@@ -141,8 +141,8 @@ export default function ChartsSection({
           <h3 className="text-lg font-semibold">Capital Allocation Overview</h3>
           <p className="text-xs text-slate-400">Active holdings vs realized sales proceeds</p>
         </div>
-        <div className="h-[240px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
+        <div className="h-[240px] w-full min-w-0">
+          <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
             <PieChart>
               <Pie
                 data={summaryData}
@@ -173,8 +173,8 @@ export default function ChartsSection({
           <h3 className="text-lg font-semibold">Yearly Stock Transaction Trend</h3>
           <p className="text-xs text-slate-400">Total stock purchases (buys) vs realized sales (proceeds)</p>
         </div>
-        <div className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
+        <div className="h-[300px] w-full min-w-0">
+          <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
             <LineChart data={trendData}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
               <XAxis 

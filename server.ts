@@ -7,7 +7,7 @@ import OpenAI from "openai";
 const yahooFinance = new YahooFinance();
 
 const openai = new OpenAI({
-  apiKey: process.env.NVIDIA_API_KEY || "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",
+  apiKey: process.env.NVIDIA_API_KEY || "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",
   baseURL: "https://integrate.api.nvidia.com/v1",
 });
 
